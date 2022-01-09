@@ -141,7 +141,7 @@ class Detector():
         path = ET.SubElement(annotation, 'path')
 
         # path.text = getcwd() + '\{}\{}'.format(imgdir, image_name)  # 用于返回当前工作目录
-        path.text = getcwd() + '{}\{}'.format(imgdir, image_name)  # 用于返回当前工作目录
+        path.text ='{}/{}'.format(imgdir, image_name)  # 用于返回当前工作目录
 
         # 创建一级分支source
         source = ET.SubElement(annotation, 'source')
@@ -193,6 +193,7 @@ class Detector():
             # 判断后缀只处理图片文件
             if image_name.endswith(('.jpg', '.png', '.jpeg', '.bmp')):
                 image = cv2.imread(os.path.join(self.imgdir, image_name))
+                file_tail = os.path.splitext(image_name)[1]
                 coordinates_list = self.run(image, model, self.device, self.half)
                 (h, w) = image.shape[:2]
                 # xml_name = ('.\{}\{}.xml'.format(outdir, image_name.strip('.jpg')))
@@ -217,7 +218,7 @@ class Detector():
                     root = tree.getroot()
                     self.pretty_xml(root, '\t', '\n')
                     # tree.write('.\{}\{}.xml'.format(outdir, image_name.strip('.jpg')), encoding='utf-8')
-                    tree.write('{}\{}.xml'.format(self.outdir, image_name.strip('.jpg')), encoding='utf-8')
+                    tree.write('{}\{}.xml'.format(self.outdir, image_name.strip(file_tail)), encoding='utf-8')
                 else:
                     print(image_name)
 
